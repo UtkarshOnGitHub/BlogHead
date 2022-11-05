@@ -5,8 +5,8 @@ import Login from '../components/Authentication/Login';
 import OTP from '../components/Authentication/OTP';
 import Signup from '../components/Authentication/Signup';
 import Blogs from '../components/Blogs/Blogs';
+import UpdateBlog from '../components/Blogs/UpdateBlog';
 import WriteBlogs from '../components/Blogs/WriteBlogs';
-import Comment from '../components/comment/comment';
 import MiddleComp from '../components/MiddleContent/MiddleComp';
 
 const AllRoutes = () => {
@@ -18,8 +18,8 @@ const AllRoutes = () => {
         <Route path ="/forget" element={<Forget/>}></Route>
         <Route path ="/reset" element={<OTP/>}></Route>
         <Route path ="/blogs" element={<Blogs/>}></Route>
-        <Route path ="/comment" element={<Comment/>}></Route>
         <Route path ="/writeblog" element={<WriteBlogs/>}></Route>
+        <Route path ="/updateblog/:id" element={<UpdateBlog/>}></Route>
     </Routes>
   )
 }

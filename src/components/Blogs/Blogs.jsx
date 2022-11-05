@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Box,
   Heading,
@@ -15,11 +15,13 @@ import {
   Button,
   ButtonGroup
 } from '@chakra-ui/react';
-import { getDetails, showblogs, updateblog } from '../api/Allapi';
+import { deleteBlog, getDetails, showblogById, showblogs, showComments, updateblog } from '../api/Allapi';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import {BsPlusCircle} from "react-icons/bs"
 import { Navigate, useNavigate } from 'react-router-dom';
+import Comment from './Comment';
+
 
 
 
@@ -62,6 +64,11 @@ const Blogs = () => {
   const navigate = useNavigate()
   const [data , setData] = useState([]);
   const [email,setEmail] = useState("")
+  const [modal , setModal] = useState(false)
+  const [comments, setComments] = useState([]);
+  const [id , setId] = useState("")
+  const [state , setState] = useState(false)
+  const [tosend , setTosend] = useState("")
   useEffect(()=>{
     showblogs().then((res)=>{
       setData(res.data.data)
@@ -69,7 +76,7 @@ const Blogs = () => {
     getDetails(token).then((res)=>{
       setEmail(res.data.email)
     })
-  },[])
+  },[state])
 
 
   const addBlog=()=>{
@@ -78,9 +85,35 @@ const Blogs = () => {
 
   }
 
+  const handleModal =(id)=>{
+    showComments(id).then((res)=>{
+        setComments(res.data)
+    })
+    showblogById(id).then((res)=>{
+      console.log(res)
+      setTosend(res.data.user.email)
+    })
+    setModal(true)
+    setId(id)
+  }
 
+
+  const refreshState =()=>{
+    showComments(id).then((res)=>{
+      setComments(res.data)
+    })
+  }
+
+  const handleDeleteBlog =(id)=>{
+    deleteBlog(id).then((res)=>{
+      console.log(res)
+      setState(!state)
+    })
+  }
+  
 
   return (
+    <>
     <Container maxW={'7xl'} p="12">
       <Box m="auto" display="flex"justifyContent="center">
         <BsPlusCircle  fontSize="130px" cursor={"pointer"} onClick={addBlog}/>
@@ -97,9 +130,7 @@ const Blogs = () => {
                 <Link textDecoration="none" _hover={{ textDecoration: 'none' }}>
                   <Image
                     transform="scale(1.0)"
-                    src={
-                      'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80'
-                    }
+                    src={`https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80`}
                     alt="some text"
                     objectFit="contain"
                     width="100%"
@@ -124,8 +155,9 @@ const Blogs = () => {
                 date={new Date()}
               />
               <ButtonGroup marginTop={"10px"}>
-              {e.user.email === email ?<Button>Edit</Button>: ""}
-              <Button>Comment</Button>
+              {e.user.email === email ?<Button onClick={()=>navigate(`/updateblog/${e._id}`)}>Edit</Button>: ""}
+              <Button onClick={()=>{handleModal(e._id)}}>Comment</Button>
+              {e.user.email === email ? <Button onClick={()=>{handleDeleteBlog(e._id)}}>Delete</Button> : ""}
               </ButtonGroup>
             </Box> 
           </WrapItem>
@@ -162,6 +194,8 @@ const Blogs = () => {
         </Text>
       </VStack>
     </Container>
+    <Comment modal={modal} setModal={setModal} comments={comments} id={id} refreshState={refreshState} emailAdmin={tosend}/>
+    </>
   );
 };
 
