@@ -62,6 +62,9 @@ export const getDetails =(token)=>{
         token:token
     })
 }
+
+
+
 export const updateblog =(data={},id)=>{
     return axios.patch("http://localhost:8080/blogs/updateblog", {
         title:data.title,
