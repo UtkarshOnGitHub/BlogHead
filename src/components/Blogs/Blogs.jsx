@@ -75,7 +75,7 @@ const Blogs = () => {
     })
     getDetails(token).then((res)=>{
       setEmail(res.data.email)
-    })
+    }) 
   },[state])
 
 
