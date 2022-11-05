@@ -9,6 +9,9 @@ import UpdateBlog from '../components/Blogs/UpdateBlog';
 import WriteBlogs from '../components/Blogs/WriteBlogs';
 import MiddleComp from '../components/MiddleContent/MiddleComp';
 
+
+
+
 const AllRoutes = () => {
   return (
     <Routes>
