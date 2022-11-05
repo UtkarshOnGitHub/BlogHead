@@ -43,6 +43,9 @@ export const writeblogs =(data={},token)=>{
     })
 }
 
+
+
+
 export const showblogs =()=>{
     return axios.get("http://localhost:8080/blogs/showblogs")
 } 
